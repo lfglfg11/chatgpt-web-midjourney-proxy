@@ -10,7 +10,7 @@ const ms = useMessage();
 const config = ref( {
 model: [
   { "label": "nano-banana-pro", "value": "nano-banana-pro" },
-  { "label": "nano-banana-pro-4k", "value": "nano-banana-pro-4k" }，
+  { "label": "nano-banana-pro-4k", "value": "nano-banana-pro-4k" },
   { "label": "jimeng-3.0", "value": "jimeng-3.0" },
   { "label": "jimeng-3.1", "value": "jimeng-3.1" },
   { "label": "nano-banana", "value": "nano-banana" },
