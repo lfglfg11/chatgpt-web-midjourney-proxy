@@ -153,13 +153,7 @@ const dimensionsList= computed(()=>{
 watch(()=>f.value.model,(n)=>{
     f.value.size='1024x1024';
 })
-const isCanImageEdit= computed(()=>{
-    if(f.value.model=='dall-e-2') return true;
-    if(f.value.model=='gpt-image-1') return true;
-    if(f.value.model.indexOf('kontext')>-1) return true;
-    if(f.value.model.indexOf('banana')>-1) return true;
-    return false;
-})
+const isCanImageEdit = computed(() => true);
 
 const selectFile=(input:any)=>{
     const ff=input.target.files[0];
