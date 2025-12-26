@@ -29,7 +29,7 @@ interface myFile{
 const st =ref({isGo:false,quality:'medium' }); 
 const fsRef= ref() ; 
 const base64Array= ref<myFile[]>([]);    
-const f = ref({size:'1024x1024', prompt:'',"model": "jimeng-4.1","n": 1});
+const f = ref({size:'16:9', prompt:'',"model": "jimeng-4.1","n": 1});
 const isDisabled= computed(()=>{
     if(st.value.isGo) {
         //console.log('st.value.isGo',st.value.isGo);
@@ -72,87 +72,32 @@ watch(()=>homeStore.myData.act,(n)=>{
     if(n=='updateChat')  st.value.isGo=false;  
 })
 
- 
-const qualityOption=  computed(()=>{ 
-    return [
-{label:'High',value: 'high'}
-,{label:'Medium',value: 'medium'}
-,{label:'Low',value: 'low'}
- 
-]
+const qualityOption = computed(() => {
+  return [
+    { label: 'High', value: 'high' },
+    { label: 'Medium', value: 'medium' },
+    { label: 'Low', value: 'low' }
+  ];
 });
-const dimensionsList= computed(()=>{
-    if(f.value.model=='dall-e-2'){
-        return [{ 
-                "label": "1024px*1024px",
-                "value": "1024x1024"
-            }, {
-                "label": "512px*512px",
-                "value": "512x512"
-            }, {
-                "label": "256px*256px",
-                "value": "256x256"
-            }
-    ];
-    } 
-    if(f.value.model=='gpt-image-1'){
-        return [{ 
-                    "label": "1024px*1024px",
-                    "value": "1024x1024"
-                }, {
-                    "label": "1536px*1024px",
-                    "value": "1536x1024"
-                }, {
-                    "label": "1024px*1536px",
-                    "value": "1024x1536"
-                }
-        ];
-    }
-    if(f.value.model.includes('banana')){ //auto
-     return [{ 
-                    "label": "auto",
-                    "value": "auto"
-                }, { 
-                    "label": "4:3",
-                    "value": "4x3"
-                },{
-                    "label": "3:4",
-                    "value": "3x4"
-                }, {
-                    "label": "16:9",
-                    "value": "16x9"
-                }, {
-                    "label": "9:16",
-                    "value": "9x16"
-                }, {
-                    "label": "2:3",
-                    "value": "2x3"
-                }, {
-                    "label": "3:2",
-                    "value": "3x2"
-                }
-                , {
-                    "label": "1:1",
-                    "value": "1024x1024"
-                }
-        ];
-    }
-    return [{ 
-                "label": "1024px*1024px",
-                "value": "1024x1024"
-            }, {
-                "label": "1792px*1024px",
-                "value": "1792x1024"
-            }, {
-                "label": "1024px*1792px",
-                "value": "1024x1792"
-            }
-     ]
-     
-})
-watch(()=>f.value.model,(n)=>{
-    f.value.size='1024x1024';
-})
+
+const dimensionsList = computed(() => {
+  return [
+    { label: '1:1', value: '2048x2048' },
+    { label: '16:9', value: '2560x1440' },
+    { label: '9:16', value: '1440x2560' },
+    { label: '2:3', value: '1664x2496' },
+    { label: '3:2', value: '2496x1664' },
+    { label: '3:4', value: '1728x2304' },
+    { label: '4:3', value: '2304x1728' },
+    { label: '21:9', value: '3024x1296' }
+  ];
+});
+
+watch(() => f.value.model, (n) => {
+  // 默认选 1:1（即 2048x2048），你也可以改回 'auto' 如果更合适
+  f.value.size = '2048x2048';
+});
+
 const isCanImageEdit = computed(() => true);
 
 const selectFile=(input:any)=>{

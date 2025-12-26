@@ -238,105 +238,107 @@ export const gptUploadFile=   (url :string, FormData:FormData)=>{
 
 }
 
-export const subGPT= async (data:any, chat:Chat.Chat )=>{
-   let d:any;
-   let action= data.action;
-   // mlog("gp-image-1 base64Array ",   data.base64Array   )
-   //chat.myid=  `${Date.now()}`;
-   const isDall=  action=='gpt.dall-e-3' || isDallImageModel( data.data?.model) ||  data.data?.model?.indexOf('banana')
-   
-   //if(  action=='gpt.dall-e-3' && data.data && data.data.model && data.data.model.indexOf('ideogram')>-1 ){ //ideogram
-   if( isDall && data.data && data.data.model && data.data.model.indexOf('ideogram')>-1 ){ //ideogram
-         mlog("ddlog 数据 ", data.data  )
-         try{
-            let d= await ideoSubmit(data.data );
-            mlog("ddlog 数据返回 ", d  )
-             const rz = d[0];
-            chat.text= rz.prompt//rz.p??`图片已完成`;
-            chat.opt={imageUrl:rz.url } ;
-            chat.loading = false;
-            homeStore.setMyData({act:'updateChat', actData:chat });
+export const subGPT = async (data: any, chat: Chat.Chat) => {
+  let d: any;
+  let action = data.action;
+  const isDall = action === 'gpt.dall-e-3' || isDallImageModel(data.data?.model);
 
-         }catch(e){
-            //chat.text='失败！'+"\n```json\n"+JSON.stringify(d, null, 2)+"\n```\n";
-            chat.text='失败！'+"\n```json\n"+   e  +"\n```\n";
-            chat.loading=false;
-            homeStore.setMyData({act:'updateChat', actData:chat });
-         }
-   }else if( isDall  && data.data.base64Array!=undefined ){ //执行变化
-        mlog("gp-image-1 base64Array ",data.data ,  data.data.base64Array   )
-     //let d= await gptFetch('/v1/images/edits', data.data);
-     const formData = new FormData( ); 
-     for(let o in data.data ){
-        if(o=='base64Array'){
-            for(let f of data.data.base64Array){
-                 formData.append('image[]', f.file )
-            }
-        }else{
-            if(o=='size' && data.data[o]=='auto'){
-                continue;
-            }
-            formData.append(o, data.data[o])
-        }
-       
-
-     }
-    mlog("formData  ",  formData   )
-    
-    //const jda=    upd.data
+  if (isDall && data.data && data.data.model && data.data.model.indexOf('ideogram') > -1) {
+    mlog("ddlog 数据 ", data.data);
     try {
-        const ds = await gptUploadFile('/v1/images/edits', formData)
-        const d=ds.data;
-        if(ds.status!=200) throw "Fail with status:"+ ds.status
-        //const d= jda;
-        //mlog("gp-image-1 结果 ",  d   )
-    
-      
-        let key= 'dall:'+chat.myid;
-        const rz : any= d.data[0];
-        if(rz.b64_json){
-            const base64='data:image/png;base64,'+rz.b64_json;
-            await localSaveAny(base64,key)
-        }
-       
-        chat.text= rz.revised_prompt??`图片已完成`;
-        chat.opt={imageUrl:rz.url?rz.url: 'https://www.openai-hk.com/res/img/open.png' } ;
-        chat.loading = false;
-        homeStore.setMyData({act:'updateChat', actData:chat });
+      let d = await ideoSubmit(data.data);
+      mlog("ddlog 数据返回 ", d);
+      const rz = d[0];
+      chat.text = rz.prompt;
+      chat.opt = { imageUrl: rz.url };
+      chat.loading = false;
+      homeStore.setMyData({ act: 'updateChat', actData: chat });
     } catch (e) {
-        chat.text='失败！'+"\n```json\n"+ (d?JSON.stringify(d, null, 2):e) +"\n```\n";
-        chat.loading=false;
-        homeStore.setMyData({act:'updateChat', actData:chat });
+      chat.text = '失败！\n```json\n' + e + '\n```\n';
+      chat.loading = false;
+      homeStore.setMyData({ act: 'updateChat', actData: chat });
     }
-    
+  } else if (isDall && data.data?.base64Array !== undefined) {
+    mlog("gp-image-1 base64Array ", data.data, data.data.base64Array);
+    const formData = new FormData();
+    for (let o in data.data) {
+      if (o === 'base64Array') {
+        for (let f of data.data.base64Array) {
+          formData.append('image[]', f.file);
+        }
+      } else {
+        if (o === 'size' && data.data[o] === 'auto') {
+          continue;
+        }
+        formData.append(o, data.data[o]);
+      }
+    }
+    mlog("formData ", formData);
 
-   }else if( isDall ){ //执行变化
-       // chat.model= 'dall-e-3';
-       
+    try {
+      const ds = await gptUploadFile('/v1/images/edits', formData);
+      const d = ds.data;
+      if (ds.status !== 200) throw "Fail with status:" + ds.status;
 
-       let d= await gptFetch('/v1/images/generations', data.data);
-       try{
-            const rz : any= d.data[0];
-            let key= 'dall:'+chat.myid;
-      
-            if(rz.b64_json){
-                const base64='data:image/png;base64,'+rz.b64_json;
-                await localSaveAny(base64,key)
-            }
-            chat.text= rz.revised_prompt??`图片已完成`;
-            chat.opt={imageUrl:rz.url?rz.url: 'https://www.openai-hk.com/res/img/open.png' } ;
-            chat.loading = false;
-            homeStore.setMyData({act:'updateChat', actData:chat });
-       }catch(e){
-            //chat.text='失败！'+"\n```json\n"+JSON.stringify(d, null, 2)+"\n```\n";
-            chat.text='失败！'+"\n```json\n"+ (d?JSON.stringify(d, null, 2):e) +"\n```\n";
-            chat.loading=false;
-            homeStore.setMyData({act:'updateChat', actData:chat });
-       }
+      let key = 'dall:' + chat.myid;
+      const rz: any = d.data[0];
+      if (rz.b64_json) {
+        const base64 = 'data:image/png;base64,' + rz.b64_json;
+        await localSaveAny(base64, key);
+      }
 
-   }
+      chat.text = rz.revised_prompt ?? `图片已完成`;
+      chat.opt = { imageUrl: rz.url ?? 'https://www.openai-hk.com/res/img/open.png' };
+      chat.loading = false;
+      homeStore.setMyData({ act: 'updateChat', actData: chat });
+    } catch (e) {
+      chat.text = '失败！\n```json\n' + (d ? JSON.stringify(d, null, 2) : e) + '\n```\n';
+      chat.loading = false;
+      homeStore.setMyData({ act: 'updateChat', actData: chat });
+    }
+  } else if (isDall) {
+    try {
+      let d = await gptFetch('/v1/images/generations', data.data);
+      const rz: any = d.data[0];
+      let key = 'dall:' + chat.myid;
 
-}
+      if (rz.b64_json) {
+        const base64 = 'data:image/png;base64,' + rz.b64_json;
+        await localSaveAny(base64, key);
+      }
+      chat.text = rz.revised_prompt ?? `图片已完成`;
+      chat.opt = { imageUrl: rz.url ?? 'https://www.openai-hk.com/res/img/open.png' };
+      chat.loading = false;
+      homeStore.setMyData({ act: 'updateChat', actData: chat });
+    } catch (e) {
+      chat.text = '失败！\n```json\n' + (d ? JSON.stringify(d, null, 2) : e) + '\n```\n';
+      chat.loading = false;
+      homeStore.setMyData({ act: 'updateChat', actData: chat });
+    }
+  }
+  // ✅ 新增：处理 jimeng / banana 等自研模型（非 DALL·E）
+  else {
+    try {
+      // 使用同一个接口，但逻辑上独立于 DALL·E
+      let d = await gptFetch('/v1/images/generations', data.data);
+      const rz: any = d.data[0];
+      let key = 'dreamina:' + chat.myid;
+
+      if (rz.b64_json) {
+        const base64 = 'data:image/png;base64,' + rz.b64_json;
+        await localSaveAny(base64, key);
+      }
+      chat.text = rz.prompt ?? `图片已完成`;
+      chat.opt = { imageUrl: rz.url ?? 'https://www.openai-hk.com/res/img/open.png' };
+      chat.loading = false;
+      homeStore.setMyData({ act: 'updateChat', actData: chat });
+    } catch (e) {
+      chat.text = '失败！\n```json\n' + (d ? JSON.stringify(d, null, 2) : e) + '\n```\n';
+      chat.loading = false;
+      homeStore.setMyData({ act: 'updateChat', actData: chat });
+    }
+  }
+};
 
 export const isDallImageModel =(model:string|undefined)=>{
     if(!model) return false;
