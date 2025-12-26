@@ -106,7 +106,7 @@ export default {
   ,mjtab:{
     chat:'对话'
     ,draw:'绘画'
-    ,drawinfo:'AI绘画 Midjourney引擎'
+    ,drawinfo:'AI绘画'
     ,gallery:'画廊'
     ,galleryInfo:'我的画廊'
   }

@@ -36,14 +36,14 @@ const handleUpdateValue=(v:string)=>{
 }
 const initLoad=()=>{
     if(route.query.tab){
-        st.value.tab= 'midjourney'//route.query.tab as string;
+        st.value.tab= 'dall.e'//route.query.tab as string;
         let tt= (route.query.tab as string).toLocaleLowerCase();
         if( ['dall.e','ideogram'].indexOf(tt)>-1 ){
            st.value.tab=tt;
         }
         handleUpdateValue(   st.value.tab )
     }
-    else st.value.tab=( gptServerStore.myData.DRAW_TYPE?gptServerStore.myData.DRAW_TYPE:'midjourney')
+    else st.value.tab=( gptServerStore.myData.DRAW_TYPE?gptServerStore.myData.DRAW_TYPE:'dall.e')
 }
 initLoad();
 
@@ -55,14 +55,11 @@ initLoad();
     <n-tab-pane name="start" tab=""> 
 
     </n-tab-pane>
-    <n-tab-pane name="midjourney" tab="MidJourney" >
-      <!--  -->
+    <!-- <n-tab-pane name="midjourney" tab="MidJourney" >
     <n-tabs type="segment" animated   default-value="draw23" size="small">
         <n-tab-pane name="draw23" :tab="$t('mjchat.draw')">
           <aiDrawInputItem @draw-sent="drawSent" @close="$emit('close')"></aiDrawInputItem>
         </n-tab-pane>
-        <!-- <n-tab-pane name="chap2" tab="第二章">2</n-tab-pane>
-        <n-tab-pane name="chap3" tab="第三章">3</n-tab-pane> -->
         <n-tab-pane name="face" :tab="$t('mjchat.face')">
           <div class="p-4"><aiFace  /></div>
         </n-tab-pane>
@@ -70,16 +67,15 @@ initLoad();
           <div class="p-4"><aiBlend  /></div>
         </n-tab-pane>
     </n-tabs>
-
-    </n-tab-pane>
+    </n-tab-pane> -->
     
-    <n-tab-pane name="dall.e" tab="Dall.E">
+    <n-tab-pane name="dall.e" tab="Images">
      <div class="p-4"><aiDall  /></div>
     </n-tab-pane>
 
-    <n-tab-pane name="ideogram" tab="IdeoGram">
+    <!-- <n-tab-pane name="ideogram" tab="IdeoGram">
      <div class="p-2"> <aiIdeoInput/> </div>
-    </n-tab-pane>  
+    </n-tab-pane>   -->
     
 
 

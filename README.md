@@ -107,6 +107,42 @@ docker run --name chatgpt-web-midjourney-proxy  -d -p 6015:3002 \
 ```
 访问 http://ip:6015 
 
+## 本地开发运行
+
+### 1. 安装依赖
+在项目根目录执行以下命令（已启用 pnpm workspace，会自动安装 service 目录依赖）：
+```bash
+pnpm install
+```
+
+### 2. 配置环境变量
+- 后端：进入 `service` 目录，将 `.env.example` 复制为 `.env` 并填写相关配置。
+- 前端：根目录 `.env` 默认配置通常无需修改。
+
+### 3. 启动项目
+在根目录执行：
+```bash
+pnpm dev:all
+```
+或者运行脚本：
+```bash
+.\start.cmd
+```
+
+### 4. 打包编译
+如果你需要打包发布，在根目录执行：
+```bash
+# 同时打包前端和后端
+pnpm build:all
+
+# 仅打包前端
+pnpm build
+
+# 仅打包后端
+pnpm build:service
+```
+打包后的前端文件在 `dist` 目录，后端文件在 `service/build` 目录。
+
 **文件上传**: 
 ```bash
 docker run --name chatgpt-web-midjourney-proxy  -d -p 6015:3002 \

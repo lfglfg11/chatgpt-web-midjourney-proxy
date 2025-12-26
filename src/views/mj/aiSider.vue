@@ -123,6 +123,7 @@ const chatId= computed(()=>chatStore.active??'1002' );
             </a>
 
 
+            <!--
             <a v-if="!isDisableMenu ( 'dance')"      @click="st.active='dance'; urouter.push('/dance')" 
                 class=" router-link-exact-active h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c] hover:bg-[#bbb] dark:hover:bg-[#555]">
                 <n-tooltip placement="right" trigger="hover">
@@ -135,6 +136,7 @@ const chatId= computed(()=>chatStore.active??'1002' );
                     {{ $t('dance.menuinfo') }}
                 </n-tooltip>                
             </a>
+            -->
 
              <a v-if="!isDisableMenu ( 'realtime')"   @click="homeStore.setMyData({act:'openRealtime'}) "  
                 class=" router-link-exact-active h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c] hover:bg-[#bbb] dark:hover:bg-[#555]">

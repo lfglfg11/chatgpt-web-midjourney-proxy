@@ -17,7 +17,11 @@
   ],
   "scripts": {
     "dev": "vite",
+    "dev:service": "pnpm --filter chatgpt-web-service dev",
+    "dev:all": "run-p dev dev:service",
     "build": "run-p build-only",
+    "build:service": "pnpm --filter chatgpt-web-service build",
+    "build:all": "pnpm build && pnpm build:service",
     "buildold": "run-p type-check build-only",
     "preview": "vite preview",
     "build-only": "vite build",
