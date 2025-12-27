@@ -29,7 +29,7 @@ interface myFile{
 const st =ref({isGo:false,quality:'medium' }); 
 const fsRef= ref() ; 
 const base64Array= ref<myFile[]>([]);    
-const f = ref({size:'16:9', prompt:'',"model": "jimeng-4.1","n": 1});
+const f = ref({ size: '2048x2048', prompt: '', model: 'jimeng-4.1', n: 1 });
 const isDisabled= computed(()=>{
     if(st.value.isGo) {
         //console.log('st.value.isGo',st.value.isGo);
@@ -82,6 +82,7 @@ const qualityOption = computed(() => {
 
 const dimensionsList = computed(() => {
   return [
+    //{ label: 'auto', value: 'auto' },
     { label: '1:1', value: '2048x2048' },
     { label: '16:9', value: '2560x1440' },
     { label: '9:16', value: '1440x2560' },
@@ -93,10 +94,8 @@ const dimensionsList = computed(() => {
   ];
 });
 
-watch(() => f.value.model, (n) => {
-  // 默认选 1:1（即 2048x2048），你也可以改回 'auto' 如果更合适
-  f.value.size = '2048x2048';
-});
+// 注意：不要在切换模型时强制把 size 复位为 1:1。
+// banana 与 jimeng 传参一致，size 应始终以用户选择为准。
 
 const isCanImageEdit = computed(() => true);
 

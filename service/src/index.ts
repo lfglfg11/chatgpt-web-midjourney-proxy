@@ -127,6 +127,10 @@ router.get('/reg', regCookie )
     ? process.env.OPENAI_API_BASE_URL
     : 'https://api.openai.com'
 
+// 复用现有开关：OPENAI_API_DISABLE_DEBUG=true 时关闭所有调试输出
+const OPENAI_API_DISABLE_DEBUG = String(process.env.OPENAI_API_DISABLE_DEBUG ?? '').toLowerCase() === 'true'
+const DEBUG_IMAGE_SIZE = !OPENAI_API_DISABLE_DEBUG
+
 app.use('/mjapi',authV2 , proxy(process.env.MJ_SERVER?process.env.MJ_SERVER:'https://api.openai.com', {
   https: false, limit: '10mb',
   proxyReqPathResolver: function (req) {
@@ -308,6 +312,24 @@ app.use('/openapi' ,authV2, turnstileCheck, proxy(API_BASE_URL, {
   https: false, limit: '10mb',
   proxyReqPathResolver: function (req) {
     return req.originalUrl.replace('/openapi', '') // 将URL中的 `/openapi` 替换为空字符串
+  },
+  proxyReqBodyDecorator: function (bodyContent, srcReq) {
+    if (DEBUG_IMAGE_SIZE && srcReq.method === 'POST' && srcReq.originalUrl.includes('/v1/images/generations')) {
+      try {
+        const body = typeof bodyContent === 'string'
+          ? JSON.parse(bodyContent)
+          : bodyContent
+        globalThis.console.log('[DEBUG_IMAGE_SIZE]', {
+          url: srcReq.originalUrl,
+          model: body?.model,
+          size: body?.size,
+        })
+      }
+      catch {
+        globalThis.console.log('[DEBUG_IMAGE_SIZE]', { url: srcReq.originalUrl, bodyType: typeof bodyContent })
+      }
+    }
+    return bodyContent
   },
   proxyReqOptDecorator: function (proxyReqOpts, srcReq) {
     proxyReqOpts.headers['Authorization'] ='Bearer '+ process.env.OPENAI_API_KEY;

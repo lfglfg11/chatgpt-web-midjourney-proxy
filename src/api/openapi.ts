@@ -243,6 +243,47 @@ export const subGPT = async (data: any, chat: Chat.Chat) => {
   let action = data.action;
   const isDall = action === 'gpt.dall-e-3' || isDallImageModel(data.data?.model);
 
+    const normalizeImageSize = (size: unknown): string | undefined => {
+        if (typeof size !== 'string')
+            return undefined;
+        const s = size.trim();
+        if (!s || s === 'auto')
+            return undefined;
+
+        const ratioToSize: Record<string, string> = {
+            '1:1': '2048x2048',
+            '2:3': '1664x2496',
+            '3:2': '2496x1664',
+            '3:4': '1728x2304',
+            '4:3': '2304x1728',
+            '16:9': '2560x1440',
+            '9:16': '1440x2560',
+            '21:9': '3024x1296',
+        };
+
+        if (ratioToSize[s])
+            return ratioToSize[s];
+
+        // 已经是像素尺寸（如 2560x1440）
+        if (/^\d+x\d+$/i.test(s))
+            return s;
+
+        // 兜底：保持原值（避免破坏后端自定义格式）
+        return s;
+    };
+
+    const normalizeImagePayload = (payload: any) => {
+        if (!payload || typeof payload !== 'object')
+            return payload;
+        const next = { ...payload };
+        const normalizedSize = normalizeImageSize(next.size);
+        if (normalizedSize)
+            next.size = normalizedSize;
+        else
+            delete next.size;
+        return next;
+    };
+
   if (isDall && data.data && data.data.model && data.data.model.indexOf('ideogram') > -1) {
     mlog("ddlog 数据 ", data.data);
     try {
@@ -259,18 +300,16 @@ export const subGPT = async (data: any, chat: Chat.Chat) => {
       homeStore.setMyData({ act: 'updateChat', actData: chat });
     }
   } else if (isDall && data.data?.base64Array !== undefined) {
-    mlog("gp-image-1 base64Array ", data.data, data.data.base64Array);
+        const payload = normalizeImagePayload(data.data);
+        mlog("gp-image-1 base64Array ", payload, payload.base64Array);
     const formData = new FormData();
-    for (let o in data.data) {
+        for (let o in payload) {
       if (o === 'base64Array') {
-        for (let f of data.data.base64Array) {
+                for (let f of payload.base64Array) {
           formData.append('image[]', f.file);
         }
       } else {
-        if (o === 'size' && data.data[o] === 'auto') {
-          continue;
-        }
-        formData.append(o, data.data[o]);
+                formData.append(o, payload[o]);
       }
     }
     mlog("formData ", formData);
@@ -298,7 +337,8 @@ export const subGPT = async (data: any, chat: Chat.Chat) => {
     }
   } else if (isDall) {
     try {
-      let d = await gptFetch('/v1/images/generations', data.data);
+            const payload = normalizeImagePayload(data.data);
+            let d = await gptFetch('/v1/images/generations', payload);
       const rz: any = d.data[0];
       let key = 'dall:' + chat.myid;
 
@@ -320,7 +360,8 @@ export const subGPT = async (data: any, chat: Chat.Chat) => {
   else {
     try {
       // 使用同一个接口，但逻辑上独立于 DALL·E
-      let d = await gptFetch('/v1/images/generations', data.data);
+            const payload = normalizeImagePayload(data.data);
+            let d = await gptFetch('/v1/images/generations', payload);
       const rz: any = d.data[0];
       let key = 'dreamina:' + chat.myid;
 
