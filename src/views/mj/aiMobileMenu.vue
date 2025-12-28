@@ -56,10 +56,13 @@ const urouter = useRouter() //
         <div class="text-[13px]">{{$t('mjtab.draw')}}</div>
       </div>
 
+      <!-- 音乐入口按需求隐藏（仅注释，不改逻辑） -->
+      <!--
       <div v-if="!isDisableMenu ( 'music')"    class="flex items-center justify-center flex-col "   @click="  urouter.push('/music')"  :class="[ goHome =='music' ? 'active' : '']" >
         <SvgIcon icon="arcticons:wynk-music" class="text-3xl"></SvgIcon>
         <div class="text-[13px]">{{ $t('suno.menu') }}</div>
       </div>
+      -->
 
 
       <!-- <div  v-if="!isDisableMenu ( 'gallery')"  class="flex items-center justify-center flex-col " @click="homeStore.setMyData({act:'gallery'})" >

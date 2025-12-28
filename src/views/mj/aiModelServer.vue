@@ -22,9 +22,18 @@ interface modelGroup{
     class?:string[]
     icon?:string
     isClosed?:boolean
+    matcher?:(modelId: string) => boolean
 }
 
 const mGroup= ref<modelGroup[]>([])
+
+const findGroupForModelId = (modelId: string) => {
+    for (const group of mGroup.value) {
+        if (group.matcher && group.matcher(modelId)) return group
+        if (group.key?.length && group.key.some(k => modelId.includes(k))) return group
+    }
+    return mGroup.value.find(g => g.name === 'Other')
+}
 
 const loadModel=async ()=>{
     try {
@@ -32,22 +41,10 @@ const loadModel=async ()=>{
           mlog('asdsd>> ', modelsData )
         modelsData.data.forEach((v:any) => {
               mlog('vv>> ',v )
-              let is=false
-              for(let a of mGroup.value){
-                if(a.key.length==0 && !is){
-                    let model= v.id as string
-                    a.data.push({model})
-                    break;
-                }
-                for(let b of a.key){
-                    if(v.id && v.id.includes(b)){
-                        let model= v.id as string
-                        a.data.push({model})
-                        is=true
-                        break;
-                    }
-                }
-              }
+              const modelId = v?.id as string | undefined
+              if (!modelId) return
+              const group = findGroupForModelId(modelId)
+              group?.data.push({ model: modelId })
         });
         st.value.isLoadData=1
     } catch (error) {
@@ -57,6 +54,31 @@ const loadModel=async ()=>{
 }
 
 const initGroup=()=>{
+    // 以下三类用于将 jimeng / banana / jimeng-video 从 Other 分离出来
+    mGroup.value.push({
+        name: '即梦绘图',
+        key: [],
+        data: [],
+        matcher: (id: string) => id.startsWith('jimeng-') && !id.startsWith('jimeng-video')
+    })
+    mGroup.value.push({
+        name: '谷歌绘图',
+        key: [],
+        data: [],
+        matcher: (id: string) => id.startsWith('nano-banana')
+    })
+    mGroup.value.push({
+        name: '即梦视频',
+        key: [],
+        data: [],
+        matcher: (id: string) => id.startsWith('jimeng-video')
+    })
+        mGroup.value.push({
+        name: 'GLM',
+        key: [],
+        data: [],
+        matcher: (id: string) => id.startsWith('GLM')
+    })
     // {name:'OpenAi',key:['gpt-'],data:[]}
     // ,{name:'OpenAi O',key:['o1-','o3-'],data:[]}
     // ,{name:'Deepseek',key:['deepseek'],data:[]}
@@ -66,6 +88,7 @@ const initGroup=()=>{
     mGroup.value.push( {name:'Claude',key:['claude','c-3'],data:[],icon:"ri:claude-fill"} )
     mGroup.value.push( {name:'Gemini',key:['gemini'],data:[],icon:"cbi:gemini"} )
     mGroup.value.push( {name:'Grok',key:['grok'],data:[],icon:"token:xai"} )
+
     mGroup.value.push( {name:'Other',key:[],data:[],isClosed:true } )
 }
 

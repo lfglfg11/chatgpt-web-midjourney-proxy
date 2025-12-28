@@ -10,3 +10,8 @@
 - 2025-12-27
   - 修复 DALL 绘图尺寸：切换模型不再强制复位 size=1:1；发送 /v1/images/generations 与 /v1/images/edits 前统一规范化 size（支持把 16:9 等比例映射为 2560x1440），确保 banana/jimeng 传参一致。
   - 增加尺寸调试日志：后端终端打印 /v1/images/generations 的 model/size 入参；复用 OPENAI_API_DISABLE_DEBUG=true 关闭调试输出。
+  - UI 精简：注释隐藏 PC 侧边栏“音乐/视频”入口；注释隐藏手机端底部“音乐”入口。
+
+- 2025-12-28
+  - 模型选择分组：服务端 /v1/models 拉取的模型列表新增“即梦绘图/谷歌绘图/视频生成”三组，将 jimeng-*/nano-banana*/jimeng-video* 从 Other 分离归类。
+  - 默认模型：将首页/默认路由的 model 从 gpt-3.5-turbo 调整为 jimeng-4.1。

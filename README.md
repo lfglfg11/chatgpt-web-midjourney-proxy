@@ -127,6 +127,7 @@ pnpm dev:all
 ```bash
 .\start.cmd
 ```
+http://localhost:1002
 
 ### 4. 打包编译
 如果你需要打包发布，在根目录执行：

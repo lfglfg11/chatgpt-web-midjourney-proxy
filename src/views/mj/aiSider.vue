@@ -70,7 +70,8 @@ const chatId= computed(()=>chatStore.active??'1002' );
 
 
 
-
+            <!-- 音乐/视频入口按需求隐藏（仅注释，不改逻辑） -->
+            <!--
             <a v-if="!isDisableMenu ( 'music')"      @click="st.active='music'; urouter.push('/music')" class=" router-link-exact-active h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c] hover:bg-[#bbb] dark:hover:bg-[#555]"
              >
                 <n-tooltip placement="right" trigger="hover">
@@ -96,6 +97,7 @@ const chatId= computed(()=>chatStore.active??'1002' );
                     {{ $t('video.menuinfo') }}
                 </n-tooltip>                
             </a>
+            -->
 
 
             <a  v-if="!isDisableMenu ( 'gpts')"   @click="homeStore.setMyData({act:'showgpts'}) " class=" router-link-exact-active h-12 w-12 cursor-pointer rounded-xl bg-white duration-300 dark:bg-[#34373c] hover:bg-[#bbb] dark:hover:bg-[#555]">

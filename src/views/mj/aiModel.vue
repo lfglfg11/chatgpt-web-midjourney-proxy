@@ -29,7 +29,10 @@ model: [
   'jimeng-4.0-4k',
   'jimeng-4.1-4k',
   'jimeng-4.5',
-  'jimeng-4.5-4k'
+  'jimeng-4.5-4k',
+  'jimeng-video-3.0', 'jimeng-video-3.0-fast', 'jimeng-video-3.0-pro',
+  'jimeng-video-3.0-10s', 'jimeng-video-3.0-fast-10s', 'jimeng-video-3.0-pro-10s',
+  'jimeng-video-3.5-pro', 'jimeng-video-3.5-pro-10s', 'jimeng-video-3.5-pro-12s'
 ]
 ,maxToken:16384
 }); 
