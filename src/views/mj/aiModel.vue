@@ -21,18 +21,21 @@ const config = ref({
 model: [
   'jimeng-4.1',
   'nano-banana-pro',
-  'nano-banana-pro-4k',
+  'jimeng-video-3.5-pro',
+  'veo-3.1',
+  'sora-2',
+  'jimeng-4.5',
   'jimeng-3.0',
   'jimeng-3.1',
   'nano-banana',
   'jimeng-4.0',
   'jimeng-4.0-4k',
   'jimeng-4.1-4k',
-  'jimeng-4.5',
+  'nano-banana-pro-4k',
   'jimeng-4.5-4k',
   'jimeng-video-3.0', 'jimeng-video-3.0-fast', 'jimeng-video-3.0-pro',
   'jimeng-video-3.0-10s', 'jimeng-video-3.0-fast-10s', 'jimeng-video-3.0-pro-10s',
-  'jimeng-video-3.5-pro', 'jimeng-video-3.5-pro-10s', 'jimeng-video-3.5-pro-12s'
+  'jimeng-video-3.5-pro-10s', 'jimeng-video-3.5-pro-12s'
 ]
 ,maxToken:16384
 }); 

@@ -68,10 +68,10 @@ const initGroup=()=>{
         matcher: (id: string) => id.startsWith('nano-banana')
     })
     mGroup.value.push({
-        name: '即梦视频',
+        name: '视频生成',
         key: [],
         data: [],
-        matcher: (id: string) => id.startsWith('jimeng-video')
+        matcher: (id: string) => id.startsWith('jimeng-video') || id.startsWith('sora') || id.startsWith('veo')
     })
         mGroup.value.push({
         name: 'GLM',
