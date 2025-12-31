@@ -78,7 +78,7 @@ const modellist = computed(() => { //
         rz= rz.filter(v=> delModel.indexOf(v.value)==-1 );
         addModel.map(o=>rz.push({label:o,value:o}) )
         if (rz.length==0){
-            rz.push({label:'gpt-3.5-turbo',value:'gpt-3.5-turbo'}) 
+            rz.push({label:'jimeng-4.1',value:'jimeng-4.1'}) 
         }
     }
 
