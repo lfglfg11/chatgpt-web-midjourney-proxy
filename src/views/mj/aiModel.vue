@@ -35,7 +35,8 @@ model: [
   'jimeng-4.5-4k',
   'jimeng-video-3.0', 'jimeng-video-3.0-fast', 'jimeng-video-3.0-pro',
   'jimeng-video-3.0-10s', 'jimeng-video-3.0-fast-10s', 'jimeng-video-3.0-pro-10s',
-  'jimeng-video-3.5-pro-10s', 'jimeng-video-3.5-pro-12s'
+  'jimeng-video-3.5-pro-10s', 'jimeng-video-3.5-pro-12s',
+  'sora-2-8s', 'sora-2-12s'
 ]
 ,maxToken:16384
 }); 
